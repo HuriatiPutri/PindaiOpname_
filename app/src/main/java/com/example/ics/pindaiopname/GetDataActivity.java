@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.ics.pindaiopname.api.ApiService;
 import com.example.ics.pindaiopname.api.Client;
+import com.example.ics.pindaiopname.database.DatabaseHelper;
 import com.example.ics.pindaiopname.model.LokasiModel;
 import com.example.ics.pindaiopname.model.OpnameModel;
 import com.example.ics.pindaiopname.model.ResponseModel;
@@ -90,6 +93,8 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
         btnSimpan.setOnClickListener(this);
         drop.setOnClickListener(this);
         dropLokasi.setOnClickListener(this);
+
+        setLokasiDefault();
 
         if(MainActivity.idUnit == null){
             spUnit.setText("Pilih Unit");
@@ -201,14 +206,13 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void unit() {
-        ApiService service = Client.getClient().create(ApiService.class);
+       ApiService service = Client.getClient().create(ApiService.class);
         Call<List<UnitModel>> call = service.getUnit();
         call.enqueue(new Callback<List<UnitModel>>() {
             @Override
             public void onResponse(Call<List<UnitModel>> call, Response<List<UnitModel>> response) {
                 if(response.isSuccessful()) {
                     int jumlah = response.body().size();
-
                     ArrayList<UnitModel> listData = new ArrayList<>();
                     for (int i = 0; i < jumlah; i++) {
                         UnitModel unitModel = new UnitModel(
@@ -219,9 +223,10 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     final String[] valueUnit = new String[listData.size()];
                     final String[] valueId = new String[listData.size()];
+
                     for (int i = 0; i < listData.size(); i++) {
-                        valueId[i] = listData.get(i).getUnitID();
-                        valueUnit[i] = listData.get(i).getUnitName();
+                            valueId[i] = listData.get(i).getUnitID();
+                            valueUnit[i] = listData.get(i).getUnitName();
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(GetDataActivity.this);
                     builder.setTitle("Pilih Unit");
@@ -230,8 +235,8 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
                             spLokasi.setText("");
-                            MainActivity.idUnit = valueId[position];
-                            MainActivity.unitName = valueUnit[position];
+                          //  MainActivity.idUnit = valueId[position];
+                          //  MainActivity.unitName = valueUnit[position];
                             spUnit.setText(valueUnit[position]);
                             dialog.dismiss();
                         }
@@ -285,8 +290,8 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                     builderLokasi.setSingleChoiceItems(valueLokasi, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
-                            MainActivity.idLokasi = valueId[position];
-                            MainActivity.lokasiName = valueLokasi[position];
+                           // MainActivity.idLokasi = valueId[position];
+                           // MainActivity.lokasiName = valueLokasi[position];
                             spLokasi.setText(valueLokasi[position]);
                             dialog.dismiss();
                         }
@@ -344,4 +349,16 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    private void setLokasiDefault(){
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from lokasi", null);
+        cursor.moveToFirst();
+        if(cursor.getCount()>0) {
+            MainActivity.idUnit = cursor.getString(1).toString();
+            MainActivity.unitName = cursor.getString(2).toString() + " [Default] ";
+            MainActivity.idLokasi = cursor.getString(3).toString();
+            MainActivity.lokasiName = cursor.getString(4).toString() + "[Default]";
+        }
+    }
 }

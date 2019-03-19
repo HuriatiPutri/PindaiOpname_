@@ -2,17 +2,22 @@ package com.example.ics.pindaiopname;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ics.pindaiopname.api.ApiService;
 import com.example.ics.pindaiopname.api.Client;
 import com.example.ics.pindaiopname.database.DatabaseContract;
+import com.example.ics.pindaiopname.database.DatabaseHelper;
 import com.example.ics.pindaiopname.model.LokasiModel;
 import com.example.ics.pindaiopname.model.OpnameModel;
 import com.example.ics.pindaiopname.model.UnitModel;
@@ -33,6 +38,8 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
    private Button btnSimpan;
    private View drop, dropLokasi;
 
+    private long id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +54,8 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
         btnSimpan.setOnClickListener(this);
         drop.setOnClickListener(this);
         dropLokasi.setOnClickListener(this);
+
+        data();
     }
 
     @Override
@@ -176,15 +185,43 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
     }
 
     private void saveStok() {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseContract.LokasiColumns.ID_UNIT, idUnit);
-        values.put(DatabaseContract.LokasiColumns.NAMA_UNIT, namaUnit);
-        values.put(DatabaseContract.LokasiColumns.ID_LOKASI, idLokasi);
-        values.put(DatabaseContract.LokasiColumns.NAMA_LOKASI, namaLokasi);
-
-        getContentResolver().insert(CONTENT_URI, values);
-        setResult(101);
-
-        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from lokasi", null);
+        cursor.moveToFirst();
+        if(cursor.getCount()>0) {
+            SQLiteDatabase db_ = dbHelper.getWritableDatabase();
+            db_.execSQL("update lokasi set IdUnit='"+idUnit+"'," +
+                    "namaUnit='"+namaUnit+"'," +
+                    "idLokasi='"+idLokasi+"'," +
+                    "namaLokasi='"+namaLokasi+"'");
+            Toast.makeText(getApplicationContext(), "Edited", Toast.LENGTH_LONG).show();
+        }else{
+            ContentValues values = new ContentValues();
+            values.put(DatabaseContract.LokasiColumns.ID_UNIT, idUnit);
+            values.put(DatabaseContract.LokasiColumns.NAMA_UNIT, namaUnit);
+            values.put(DatabaseContract.LokasiColumns.ID_LOKASI, idLokasi);
+            values.put(DatabaseContract.LokasiColumns.NAMA_LOKASI, namaLokasi);
+            getContentResolver().insert(CONTENT_URI, values);
+            setResult(101);
+            Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    public void data(){
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        TextView txtLoc = findViewById(R.id.loc);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from lokasi", null);
+        cursor.moveToFirst();
+        if(cursor.getCount()>0){
+            cursor.moveToPosition(0);
+            idUnit = cursor.getString(1);
+            idLokasi = cursor.getString(3);
+            spUnit.setText(cursor.getString(2).toString());
+            spLokasi.setText(cursor.getString(4).toString());
+        }
+    }
+
+
 }
