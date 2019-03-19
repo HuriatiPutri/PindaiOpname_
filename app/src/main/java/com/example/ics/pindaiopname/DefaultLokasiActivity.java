@@ -210,7 +210,6 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
 
     public void data(){
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        TextView txtLoc = findViewById(R.id.loc);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from lokasi", null);
         cursor.moveToFirst();
