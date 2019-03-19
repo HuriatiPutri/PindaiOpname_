@@ -1,5 +1,6 @@
 package com.example.ics.pindaiopname;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.ics.pindaiopname.api.ApiService;
 import com.example.ics.pindaiopname.api.Client;
+import com.example.ics.pindaiopname.database.DatabaseContract;
 import com.example.ics.pindaiopname.model.LokasiModel;
 import com.example.ics.pindaiopname.model.OpnameModel;
 import com.example.ics.pindaiopname.model.UnitModel;
@@ -22,11 +24,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.ics.pindaiopname.database.DatabaseContract.LokasiColumns.CONTENT_URI;
+
 public class DefaultLokasiActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText spUnit,spLokasi;
-    Button btnSimpan;
-    View drop, dropLokasi;
+   private String idUnit, namaUnit, idLokasi, namaLokasi;
+   private EditText spUnit,spLokasi;
+   private Button btnSimpan;
+   private View drop, dropLokasi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
 
         spLokasi = findViewById(R.id.spLokasi);
         spUnit = findViewById(R.id.spUnit);
-        btnSimpan = findViewById(R.id.btnSimpan);
+        btnSimpan = findViewById(R.id.btnSetting);
         drop = findViewById(R.id.dropUnit);
         dropLokasi = findViewById(R.id.dropLokasi);
 
@@ -47,14 +52,14 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSimpan:
+            case R.id.btnSetting:
                 saveStok();
                 break;
             case R.id.dropUnit:
                 unit();
                 break;
             case R.id.dropLokasi:
-                lokasi(MainActivity.idUnit);
+                lokasi(idUnit);
                 break;
         }
     }
@@ -89,8 +94,8 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
                             spLokasi.setText("");
-                            MainActivity.idUnit = valueId[position];
-                            MainActivity.unitName = valueUnit[position];
+                            idUnit = valueId[position];
+                            namaUnit = valueUnit[position];
                             spUnit.setText(valueUnit[position]);
                             dialog.dismiss();
                         }
@@ -144,8 +149,8 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                     builderLokasi.setSingleChoiceItems(valueLokasi, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
-                            MainActivity.idLokasi = valueId[position];
-                            MainActivity.lokasiName = valueLokasi[position];
+                            idLokasi = valueId[position];
+                            namaLokasi = valueLokasi[position];
                             spLokasi.setText(valueLokasi[position]);
                             dialog.dismiss();
                         }
@@ -171,6 +176,15 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
     }
 
     private void saveStok() {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.LokasiColumns.ID_UNIT, idUnit);
+        values.put(DatabaseContract.LokasiColumns.NAMA_UNIT, namaUnit);
+        values.put(DatabaseContract.LokasiColumns.ID_LOKASI, idLokasi);
+        values.put(DatabaseContract.LokasiColumns.NAMA_LOKASI, namaLokasi);
 
+        getContentResolver().insert(CONTENT_URI, values);
+        setResult(101);
+
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
     }
 }

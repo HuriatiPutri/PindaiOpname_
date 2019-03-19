@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
-            startActivity(new Intent(this, DefaultLokasiActivity.class));
+            startActivity(new Intent(MainActivity.this, DefaultLokasiActivity.class));
         } else if (id == R.id.nav_upload) {
 
         } else if (id == R.id.nav_logout) {

@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <permission
+        android:name="com.example.ics.pindaiopname.READ_DATABASE"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.example.ics.pindaiopname.WRITE_DATABASE"
+        android:protectionLevel="normal" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name=".Provider.LokasiProvider"
+            android:authorities="com.example.ics.pindaiopname"
+            android:exported="true"
+            android:readPermission="com.example.ics.pindaiopname.READ_DATABASE"
+            android:writePermission="com.example.ics.pindaiopname.WRITE_DATABASE" />
         <activity android:name=".DefaultLokasiActivity"
             android:label="Setting Default Lokais"
             android:parentActivityName=".MainActivity"></activity>
