@@ -229,7 +229,7 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                             valueUnit[i] = listData.get(i).getUnitName();
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(GetDataActivity.this);
-                    builder.setTitle("Pilih Unit");
+                    builder.setTitle(R.string.pilihunit);
                     builder.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builder.setSingleChoiceItems(valueUnit, -1, new DialogInterface.OnClickListener() {
                         @Override
@@ -241,7 +241,7 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                             dialog.dismiss();
                         }
                     });
-                    builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    builder.setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -285,7 +285,7 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                         valueLokasi[i] = listData.get(i).getLokasiName();
                     }
                     AlertDialog.Builder builderLokasi = new AlertDialog.Builder(GetDataActivity.this);
-                    builderLokasi.setTitle("Pilih Lokasi");
+                    builderLokasi.setTitle(R.string.pilihlokasi);
                     builderLokasi.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builderLokasi.setSingleChoiceItems(valueLokasi, -1, new DialogInterface.OnClickListener() {
                         @Override
@@ -296,7 +296,7 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                             dialog.dismiss();
                         }
                     });
-                    builderLokasi.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    builderLokasi.setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -324,7 +324,7 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
         String brgLokasi = MainActivity.idLokasi;
         int brgQty = Integer.parseInt(edtQty.getText().toString());
         if (brgID.equals("") && brgUnit.equals("") && brgLokasi.equals("") && brgNama.equals("") && brgSatuan.equals("")) {
-            Toast.makeText(getApplicationContext(), "Field cannot be null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.cannotNUll, Toast.LENGTH_SHORT).show();
         } else {
             ApiService service = Client.getClient().create(ApiService.class);
             Call<OpnameModel> call = service.addItem(brgID, brgUnit, brgLokasi, brgQty);
@@ -332,12 +332,10 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onResponse(Call<OpnameModel> call, Response<OpnameModel> response) {
                     if (response.code() == 200) {
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
                         finish();
                     } else if (response.code() == 400) {
-                        Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Failed" + response.code(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.failed, Toast.LENGTH_LONG).show();
                     }
                 }
 

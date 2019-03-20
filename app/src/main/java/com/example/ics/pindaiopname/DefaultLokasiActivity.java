@@ -47,23 +47,19 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
 
         spLokasi = findViewById(R.id.spLokasi);
         spUnit = findViewById(R.id.spUnit);
-        btnSimpan = findViewById(R.id.btnSetting);
         drop = findViewById(R.id.dropUnit);
         dropLokasi = findViewById(R.id.dropLokasi);
 
-        btnSimpan.setOnClickListener(this);
         drop.setOnClickListener(this);
         dropLokasi.setOnClickListener(this);
-
         data();
+
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSetting:
-                saveStok();
-                break;
             case R.id.dropUnit:
                 unit();
                 break;
@@ -97,7 +93,7 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                         valueUnit[i] = listData.get(i).getUnitName();
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(DefaultLokasiActivity.this);
-                    builder.setTitle("Pilih Unit");
+                    builder.setTitle(R.string.pilihunit);
                     builder.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builder.setSingleChoiceItems(valueUnit, -1, new DialogInterface.OnClickListener() {
                         @Override
@@ -106,10 +102,12 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                             idUnit = valueId[position];
                             namaUnit = valueUnit[position];
                             spUnit.setText(valueUnit[position]);
+
+                            saveUnit();
                             dialog.dismiss();
                         }
                     });
-                    builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    builder.setNeutralButton(R.string.batal, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -153,7 +151,7 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                         valueLokasi[i] = listData.get(i).getLokasiName();
                     }
                     AlertDialog.Builder builderLokasi = new AlertDialog.Builder(DefaultLokasiActivity.this);
-                    builderLokasi.setTitle("Pilih Lokasi");
+                    builderLokasi.setTitle(R.string.pilihlokasi);
                     builderLokasi.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builderLokasi.setSingleChoiceItems(valueLokasi, -1, new DialogInterface.OnClickListener() {
                         @Override
@@ -161,10 +159,12 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                             idLokasi = valueId[position];
                             namaLokasi = valueLokasi[position];
                             spLokasi.setText(valueLokasi[position]);
+
+                            saveLokasi();
                             dialog.dismiss();
                         }
                     });
-                    builderLokasi.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    builderLokasi.setNeutralButton(R.string.batal, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -184,7 +184,7 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    private void saveStok() {
+    private void saveUnit() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from lokasi", null);
@@ -192,19 +192,35 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
         if(cursor.getCount()>0) {
             SQLiteDatabase db_ = dbHelper.getWritableDatabase();
             db_.execSQL("update lokasi set IdUnit='"+idUnit+"'," +
-                    "namaUnit='"+namaUnit+"'," +
-                    "idLokasi='"+idLokasi+"'," +
-                    "namaLokasi='"+namaLokasi+"'");
-            Toast.makeText(getApplicationContext(), "Edited", Toast.LENGTH_LONG).show();
+                    "namaUnit='"+namaUnit+"'");
+            Toast.makeText(getApplicationContext(), R.string.unit_diperbarui, Toast.LENGTH_LONG).show();
         }else{
             ContentValues values = new ContentValues();
             values.put(DatabaseContract.LokasiColumns.ID_UNIT, idUnit);
             values.put(DatabaseContract.LokasiColumns.NAMA_UNIT, namaUnit);
+            getContentResolver().insert(CONTENT_URI, values);
+            setResult(101);
+            Toast.makeText(this, R.string.unit_disimpan, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveLokasi() {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from lokasi", null);
+        cursor.moveToFirst();
+        if(cursor.getCount()>0) {
+            SQLiteDatabase db_ = dbHelper.getWritableDatabase();
+            db_.execSQL("update lokasi set idLokasi='"+idLokasi+"'," +
+                    "namaLokasi='"+namaLokasi+"'");
+            Toast.makeText(getApplicationContext(), R.string.lokasi_diperbarui, Toast.LENGTH_LONG).show();
+        }else{
+            ContentValues values = new ContentValues();
             values.put(DatabaseContract.LokasiColumns.ID_LOKASI, idLokasi);
             values.put(DatabaseContract.LokasiColumns.NAMA_LOKASI, namaLokasi);
             getContentResolver().insert(CONTENT_URI, values);
             setResult(101);
-            Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.lokasi_disimpan, Toast.LENGTH_SHORT).show();
         }
     }
 

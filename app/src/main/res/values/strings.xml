@@ -19,6 +19,16 @@
     <string name="setting">Setting Default Lokasi</string>
     <string name="upload">Upload Hasil Opname</string>
     <string name="logout">Logout</string>
-    <string name="pilih">...</string>
+    <string name="pilihlokasi">Pilih Lokasi</string>
+    <string name="pilihunit">Pilih Unit</string>
     <string name="unit">Unit</string>
+
+    <string name="lokasi_diperbarui">Lokasi diperbaharui</string>
+    <string name="unit_diperbarui">Unit diperbaharui</string>
+    <string name="batal">Batal</string>
+    <string name="success">Data disimpan</string>
+    <string name="failed">Data Gagal disimpan</string>
+    <string name="cannotNUll">Data Tidak Boleh Kosong</string>
+    <string name="unit_disimpan">Unit Disimpan</string>
+    <string name="lokasi_disimpan">Lokasi Disimpan</string>
 </resources>

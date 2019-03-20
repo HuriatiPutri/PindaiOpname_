@@ -60,12 +60,4 @@
             android:layout_toRightOf="@id/spLokasi"
             android:background="@drawable/drop_down" />
     </RelativeLayout>
-    <Button
-        android:layout_marginTop="30dp"
-        android:id="@+id/btnSetting"
-        android:text="Simpan"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </LinearLayout>
