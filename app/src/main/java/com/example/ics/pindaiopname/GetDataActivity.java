@@ -31,7 +31,6 @@ import com.example.ics.pindaiopname.model.LokasiModel;
 import com.example.ics.pindaiopname.model.OpnameModel;
 import com.example.ics.pindaiopname.model.ResponseModel;
 import com.example.ics.pindaiopname.model.UnitModel;
-import com.google.android.gms.ads.internal.client.ThinAdSizeParcel;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;

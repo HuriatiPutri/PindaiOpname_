@@ -3,7 +3,9 @@ package com.example.ics.pindaiopname;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
@@ -18,12 +20,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.ics.pindaiopname.adapter.OpnameAdapter;
 import com.example.ics.pindaiopname.api.ApiService;
 import com.example.ics.pindaiopname.api.Client;
 import com.example.ics.pindaiopname.model.OpnameModel;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +46,11 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    GoogleSignInClient googleSignInClient;
     RecyclerView rvOpname;
+
+    TextView username, email;
+    ImageView photo;
 
     private ArrayList<OpnameModel> opnameModel = new ArrayList<>();
     private OpnameAdapter adapter;
@@ -66,6 +81,29 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        username = header.findViewById(R.id.namauser);
+        email = header.findViewById(R.id.emailuser);
+        photo = header.findViewById(R.id.imageView);
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+        if(acct != null){
+            String personName = acct.getDisplayName();
+            String personEmail = acct.getEmail();
+
+            Uri personPhoto = acct.getPhotoUrl();
+
+            username.setText(personName);
+            email.setText(personEmail);
+            Glide.with(this).load(personPhoto).into(photo);
+        }
 
         adapter = new OpnameAdapter(getApplicationContext(), opnameModel);
         rvOpname = findViewById(R.id.recyclerView);
@@ -151,11 +189,22 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_upload) {
 
         } else if (id == R.id.nav_logout) {
-
+            signOut();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void signOut() {
+        googleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getApplicationContext(), "Successfully Sign Out", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, SignInActivity.class));
+                        finish();
+                    }
+                });
     }
 }
