@@ -29,6 +29,7 @@ import com.example.ics.pindaiopname.adapter.OpnameAdapter;
 import com.example.ics.pindaiopname.api.ApiService;
 import com.example.ics.pindaiopname.api.Client;
 import com.example.ics.pindaiopname.model.OpnameModel;
+import com.example.ics.pindaiopname.model.uploadModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     GoogleSignInClient googleSignInClient;
+    public static String userID;
     RecyclerView rvOpname;
 
     TextView username, email;
@@ -95,9 +97,9 @@ public class MainActivity extends AppCompatActivity
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
         if(acct != null){
+            userID = acct.getEmail();
             String personName = acct.getDisplayName();
             String personEmail = acct.getEmail();
-
             Uri personPhoto = acct.getPhotoUrl();
 
             username.setText(personName);
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_setting) {
             startActivity(new Intent(MainActivity.this, DefaultLokasiActivity.class));
         } else if (id == R.id.nav_upload) {
-
+            startActivity(new Intent(MainActivity.this, UploadActivity.class));
         } else if (id == R.id.nav_logout) {
             signOut();
         }

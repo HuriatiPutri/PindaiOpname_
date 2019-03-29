@@ -4,6 +4,7 @@ import com.example.ics.pindaiopname.model.LokasiModel;
 import com.example.ics.pindaiopname.model.OpnameModel;
 import com.example.ics.pindaiopname.model.ResponseModel;
 import com.example.ics.pindaiopname.model.UnitModel;
+import com.example.ics.pindaiopname.model.uploadModel;
 
 import java.util.List;
 
@@ -32,7 +33,8 @@ public interface ApiService {
     Call<OpnameModel> addItem(@Field("BrgID") String BrgID, @Field("UnitID") String UnitID,
                                 @Field("LokasiID") String LokasiID,
                                 @Field("Qty") int QTY);
-
+    @POST("stok/upload")
+    Call<uploadModel> uploadOpname(@Query("userID") String userID);
 
 
 }
