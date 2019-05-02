@@ -31,4 +31,7 @@
     <string name="cannotNUll">Data Tidak Boleh Kosong</string>
     <string name="unit_disimpan">Unit Disimpan</string>
     <string name="lokasi_disimpan">Lokasi Disimpan</string>
+    <string name="barang">Barang</string>
+    <string name="history">History</string>
+    <string name="title_activity_barang">BarangActivity</string>
 </resources>

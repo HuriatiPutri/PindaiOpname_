@@ -44,6 +44,7 @@ public class OpnameAdapter extends RecyclerView.Adapter<OpnameAdapter.OpnameHold
         holder.txtLokasi.setText(list.get(position).getLokasiName());
         holder.txtUnit.setText(list.get(position).getUnitName() + ",");
         holder.txtQty.setText(String.valueOf(list.get(position).getQty()));
+
     }
 
 

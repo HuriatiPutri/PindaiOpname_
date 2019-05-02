@@ -1,12 +1,12 @@
 package com.example.ics.pindaiopname.model;
 
 public class OpnameModel {
-    private String Tgl, Jam, BrgID, BrgName, LokasiID, LokasiName, UnitID, UnitName, Satuan;
-    private String message;
+    private String Tgl, Jam, BrgID, BrgName, LokasiID, LokasiName, UnitID, UnitName, Satuan, userID;
+    private int Status;
 
     private int Qty;
 
-    public OpnameModel(String tgl, String jam, String brgName, String lokasiName, String unitName, String satuan, int qty) {
+    public OpnameModel(String tgl, String jam, String brgName, String lokasiName, String unitName, String satuan, int qty, String UserID) {
         Tgl = tgl;
         Jam = jam;
         BrgName = brgName;
@@ -14,10 +14,21 @@ public class OpnameModel {
         UnitName = unitName;
         Satuan = satuan;
         Qty = qty;
+        userID = UserID;
+    }
+
+    public OpnameModel(String brgID, String brgName, String satuan) {
+        BrgID = brgID;
+        BrgName = brgName;
+        Satuan = satuan;
     }
 
     public String getTgl() {
         return Tgl;
+    }
+
+    public String getUserID() {
+        return userID;
     }
 
     public void setTgl(String tgl) {
@@ -96,7 +107,7 @@ public class OpnameModel {
         Qty = qty;
     }
 
-    public String getMessage() {
-        return message;
+    public int getStatus() {
+        return Status;
     }
 }

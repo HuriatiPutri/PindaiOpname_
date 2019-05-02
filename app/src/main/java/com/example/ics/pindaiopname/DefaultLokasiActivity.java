@@ -94,7 +94,6 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(DefaultLokasiActivity.this);
                     builder.setTitle(R.string.pilihunit);
-                    builder.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builder.setSingleChoiceItems(valueUnit, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
@@ -152,7 +151,6 @@ public class DefaultLokasiActivity extends AppCompatActivity implements View.OnC
                     }
                     AlertDialog.Builder builderLokasi = new AlertDialog.Builder(DefaultLokasiActivity.this);
                     builderLokasi.setTitle(R.string.pilihlokasi);
-                    builderLokasi.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builderLokasi.setSingleChoiceItems(valueLokasi, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {

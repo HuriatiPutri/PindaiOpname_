@@ -62,7 +62,7 @@ public class UploadActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<uploadModel> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Failed "  + t, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(),"Failed "  + t, Toast.LENGTH_SHORT).show();
             }
         });
     }

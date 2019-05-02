@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.JsonReader;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -229,13 +230,12 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(GetDataActivity.this);
                     builder.setTitle(R.string.pilihunit);
-                    builder.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builder.setSingleChoiceItems(valueUnit, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
                             spLokasi.setText("");
-                          //  MainActivity.idUnit = valueId[position];
-                          //  MainActivity.unitName = valueUnit[position];
+                            MainActivity.idUnit = valueId[position];
+                            MainActivity.unitName = valueUnit[position];
                             spUnit.setText(valueUnit[position]);
                             dialog.dismiss();
                         }
@@ -285,12 +285,11 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     AlertDialog.Builder builderLokasi = new AlertDialog.Builder(GetDataActivity.this);
                     builderLokasi.setTitle(R.string.pilihlokasi);
-                    builderLokasi.setIcon(R.drawable.mr_dialog_material_background_dark);
                     builderLokasi.setSingleChoiceItems(valueLokasi, -1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int position) {
-                           // MainActivity.idLokasi = valueId[position];
-                           // MainActivity.lokasiName = valueLokasi[position];
+                            MainActivity.idLokasi = valueId[position];
+                            MainActivity.lokasiName = valueLokasi[position];
                             spLokasi.setText(valueLokasi[position]);
                             dialog.dismiss();
                         }
@@ -326,7 +325,7 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(getApplicationContext(), R.string.cannotNUll, Toast.LENGTH_SHORT).show();
         } else {
             ApiService service = Client.getClient().create(ApiService.class);
-            Call<OpnameModel> call = service.addItem(brgID, brgUnit, brgLokasi, brgQty);
+            Call<OpnameModel> call = service.addItem(brgID, brgUnit, brgLokasi, brgQty, MainActivity.userID);
             call.enqueue(new Callback<OpnameModel>() {
                 @Override
                 public void onResponse(Call<OpnameModel> call, Response<OpnameModel> response) {
@@ -340,7 +339,8 @@ public class GetDataActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onFailure(Call<OpnameModel> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Failed dong" + t, Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplicationContext(), "Failed dong " + t, Toast.LENGTH_LONG).show();
+                    finish();
                 }
             });
         }

@@ -113,6 +113,11 @@ public class MainActivity extends AppCompatActivity
         rvOpname.setLayoutManager(new LinearLayoutManager(this));
         rvOpname.setAdapter(adapter);
 
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        ((LinearLayoutManager) mLayoutManager).setReverseLayout(true);
+        ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
+        rvOpname.setLayoutManager(mLayoutManager);
+
         listOpname();
     }
 
@@ -132,7 +137,8 @@ public class MainActivity extends AppCompatActivity
                              response.body().get(i).getLokasiName(),
                              response.body().get(i).getUnitName(),
                                 response.body().get(i).getSatuan(),
-                                response.body().get(i).getQty()
+                                response.body().get(i).getQty(),
+                                response.body().get(i).getUserID()
                         );
                         opnameModel.add(data);
                     }
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<List<OpnameModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Tidak Ada Koneksi Internet ", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -192,6 +198,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, UploadActivity.class));
         } else if (id == R.id.nav_logout) {
             signOut();
+        }else if (id == R.id.nav_barang) {
+            startActivity(new Intent(MainActivity.this, BarangActivity.class));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

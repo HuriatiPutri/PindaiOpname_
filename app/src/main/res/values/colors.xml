@@ -3,4 +3,5 @@
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81D61</color>
+    <color name="colorUpload">#4AEED775</color>
 </resources>
